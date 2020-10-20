@@ -1,0 +1,78 @@
+classdef app12 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure  matlab.ui.Figure
+        UIAxes    matlab.ui.control.UIAxes
+    end
+
+    methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+                        % Make unit sphere
+            [x,y,z] = sphere;
+            % Scale to desire radius.
+            radius = 44;
+            x = x * radius;
+            y = y * radius;
+            z = z * radius;
+            % Translate sphere to new location.
+            offset = 44;
+            % Plot as surface.
+            surf(app.UIAxes, x+offset,y+offset,z+offset) 
+            % Label axes.
+            xlabel(app.UIAxes,'X', 'FontSize', 20);
+            ylabel(app.UIAxes,'Y', 'FontSize', 20);
+            zlabel(app.UIAxes,'Z', 'FontSize', 20);
+            %axis equal;
+        end
+    end
+
+    % App initialization and construction
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure
+            app.UIFigure = uifigure;
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'UI Figure';
+
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.UIFigure);
+            title(app.UIAxes, 'Title')
+            xlabel(app.UIAxes, 'X')
+            ylabel(app.UIAxes, 'Y')
+            app.UIAxes.Position = [1 110 629 354];
+        end
+    end
+
+    methods (Access = public)
+
+        % Construct app
+        function app = app12
+
+            % Create and configure components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
